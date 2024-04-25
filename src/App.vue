@@ -1,15 +1,17 @@
 <template>
   <!--html-->
-    <Person/>
+  <Person/>
+  <Dog/>
 </template>
 
 <script lang="ts">
 //js或者ts
 import Person from './components/person.vue'
+import Dog from './components/dog.vue'
 
 export default {
   name: "App",
-  components: {Person}
+  components: {Person, Dog}
   // 组件的名字
 }
 </script>
