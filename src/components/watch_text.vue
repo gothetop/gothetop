@@ -10,7 +10,15 @@ let Person = ref({
 let Dog = reactive({
   name: "孙一楠",
   age: 3
-})
+});
+let Person1 = reactive({
+  name: "tigoo",
+  age: 18,
+  car: {
+    c1: "宝马",
+    c2: "奥迪",
+  }
+});
 
 // 方法
 function changeSum() {
@@ -43,6 +51,26 @@ function changeDogAge() {
 function  changeDog() {
   Object.assign(Dog, {name: "大黄", age: 3});
 }
+
+function changeName1() {
+  Person1.name += "~";
+}
+
+function changeAge1() {
+  Person1.age += 1;
+}
+
+function changeCar1(){
+  Person1.car.c1 += "~";
+}
+
+function changeCar2() {
+  Person1.car.c2 += "~";
+}
+
+function  changeCarall(){
+  Person1.car = {c1: "雅迪", c2: "比亚迪"};
+}
 // 监视ref类型的数据
 const stopwatch = watch(sum, (newVal, oldVal) => {  // 这里会有两个参数，一个代表旧的值，一个代表变化之后新的值
   console.log("sum加1  " + oldVal + "->" + newVal);
@@ -68,6 +96,29 @@ const stopwatch_2 = watch(Dog, (newVal, oldVal) => {
   console.log("Dog改变了！" + newVal + "->" + oldVal);
 });
 
+// 监视reactive和ref定义的对象类型的某个基本属性
+watch(() => Person1.name, (newVal, oldVal) => {
+  console.log("Person1改变了");
+});
+
+// 监视reactive和ref定义的对象类型的某个对象属性
+// 这里有几种情况，如果这里监视的对象直接写 Person1.car 他只能监视到car里面的两个属性的变化，不能监视到car整体变化
+// 如果你写成 () => Person1.car 这里就只能监视到整个car的变化，而监视不到Car内部两个属性的变化
+// 如果想都监视到，就再写 () => Person1.car 的同时，再后面加上 {deep: true}
+watch(() => Person1.car, (newVal, oldVal) => {
+  console.log("Personcar改变了");
+}, {deep: true});
+
+// 情况五 监视上述的多个数据
+// 数组中每个项的书写方法参考前四种，第五种就是提供了一个数组，可以多监视几个不同类型或者相同类型的属性
+watch([() => Person1.name, () => Person1.car], (newValue, oldValue) => {
+  console.log("名字或者车变化了");
+}, {deep: true});
+
+watch(() => Person1.age, (newVal, oldVal) => {
+  console.log("年龄变化了  " + newVal + "->" + oldVal);
+})
+
 </script>
 
 <template>
@@ -89,6 +140,16 @@ const stopwatch_2 = watch(Dog, (newVal, oldVal) => {
   <button @click="changeDogName">修改名字</button>
   <button @click="changeDogAge">修改年龄</button>
   <button @click="changeDog">修改狗</button>
+  <hr/>
+  <h1>情况四：监视【reactive】或者【ref】定义的【对象类型】数据的某个属性</h1>
+  <h1>姓名：{{Person1.name}}</h1>
+  <h1>年龄：{{Person1.age}}</h1>
+  <h1>车：{{Person1.car.c1}}, {{Person1.car.c2}}</h1>
+  <button @click="changeName1">修改名字</button>
+  <button @click="changeAge1">修改年龄</button>
+  <button @click="changeCar1">修改第一辆车</button>
+  <button @click="changeCar2">修改第二辆车</button>
+  <button @click="changeCarall">修改所有车</button>
 </div>
 </template>
 
