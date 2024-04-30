@@ -14,7 +14,8 @@
 
 <script lang="ts" setup name="person">
 // 引入ref
-import {ref} from 'vue'
+// 引入defineExpose用来向父组件暴露自己的元素
+import {ref, defineExpose} from 'vue'
 // 数据
 let name = ref("tigood");
 let age = ref(18);
@@ -34,6 +35,8 @@ function changeAge(){
   age.value += 1;
 }
 
+// 通过defineExpose 来将这两个值暴露给父组件
+defineExpose({name: name.value, age: age.value});  // 这里还是接受一个对象，这里就用js的简写写了
 </script>
 
 <style scoped>
