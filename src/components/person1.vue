@@ -1,9 +1,10 @@
 <script setup lang="ts" name="Person1">
 import {type PersonInter, type Persons} from "@/types";
-import {withDefaults} from 'vue';
-
+import {withDefaults, onMounted, onBeforeMount, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted} from 'vue';
+import {ref} from 'vue';
 
 // 数据
+let sum = ref(0);
 let person: PersonInter = {id: "adfadfa", name: "张三", age: 60};
 
 // 接受a
@@ -30,10 +31,44 @@ withDefaults(defineProps<{list?: Persons}>(), {
     name: "康师傅",
     age: 18
   }]
-})
+});
 
+function changeSum() {
+  sum.value += 1;
+}
 
+// 创建
+console.log("Person1组件被创建了");
 
+// 挂载前
+onBeforeMount(() => {
+  console.log("Person1挂载之前");
+});
+
+// 挂载后
+onMounted(() => {
+  console.log("Person1挂载后");
+});
+
+// 更新前
+onBeforeUpdate(() => {
+  console.log("Person1组件更新之前");
+});
+
+// 更新后
+onUpdated(() => {
+  console.log("Person1组件更新之后");
+});
+
+//卸载前
+onBeforeUnmount(() => {
+  console.log("Person1被卸载之前");
+});
+
+// 卸载后
+onUnmounted(() => {
+  console.log("Person被卸载之后");
+});
 
 </script>
 
@@ -43,6 +78,9 @@ withDefaults(defineProps<{list?: Persons}>(), {
       <!-- v-for很健壮，如果没有给他传值，它会知道然后不会执行工作，不会报错 -->
       <li v-for="(item, index) in list" :key="item.id">{{index}} -- {{item.id}} -- {{item.name}} -- {{item.age}}</li>
     </ul>
+    <hr>
+    <h1>总和为：{{sum}}</h1>
+    <button @click="changeSum">点我加1</button>
   </div>
 
 </template>
