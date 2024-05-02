@@ -1,60 +1,80 @@
 <template>
   <!--html-->
-  <!-- 在组件上使用了ref -->
-  <Person ref="ren"/>
-  <Dog/>
-  <Car/>
-  <Games/>
-  <Input_name/>
-  <Watch_text/>
-  <Watch_effect/>
-  <Ref_text/>
-  <button @click="test">测试</button>
-  <Person1 :list="person_list" v-if="isShow"/>
-  <SumDog/>
+  <div class="app">
+    <h2 class="title">直接就是学习Vue3</h2>
+    <!-- 导航区 -->
+    <div class="nav">
+      <!-- 字符串写法 -->
+      <RouterLink to="/home" active-class="active">首页</RouterLink>
+      <!-- 对象写法，name跳转 -->
+      <RouterLink :to="{name: 'news'}" active-class="active">新闻</RouterLink>
+      <!-- 对象写法，path跳转 -->
+      <RouterLink :to="{path: '/about'}" active-class="active">关于</RouterLink>
+    </div>
+    <!-- 内容展示区 -->
+    <div class="content">
+      <RouterView></RouterView>
+    </div>
+  </div>
+
 </template>
 
 <script setup lang="ts" name="App">
-import Person from './components/person.vue'
-import Dog from './components/dog.vue'
-import Car from "@/components/car.vue";
-import Games from "@/components/games.vue";
-import Input_name from "@/components/input_name.vue";
-import Watch_text from "@/components/watch_text.vue";
-import Watch_effect from "@/components/watch_effect.vue";
-import Ref_text from "@/components/ref_text.vue";
-import Person1 from "@/components/person1.vue";
-import SumDog from "@/components/sumdog.vue";
+import {RouterView, RouterLink} from "vue-router";
 
-// 引入ref
-import {ref, reactive} from 'vue'
-import type {Persons} from "@/types";
-
-// 用来控制Person1控件是否被卸载
-// v-if 和 v-show的区别如下：
-// v-if 和 v-show 成立的时候都会展示组件
-// 但不成立时，v-if 会将组件卸载掉，而v-show只是将组件隐藏掉 display: none
-// v-show变化时会触发组件更新，但是不会触发组件卸载
-// v-if变化时会触发组件的卸载
-let isShow = ref(true);
-// 创建一个ref容器
-let ren = ref();
-
-function test() {
-  // 打印接受到的数值
-  console.log(ren.value.name);
-  console.log(ren.value.age);
-}
-
-// reactive直接传泛型
-let person_list = reactive<Persons>([
-  {id: "sdfafa01", name: "王老五", age: 18},
-  {id: "adfadf02", name: "李四", age: 19},
-  {id: "adfadf03", name: "哈哈哈", age: 20},
-]);
 
 </script>
-
 <style>
 /* 样式 */
+.app{
+  width: 100%;
+}
+.title{
+  text-align: center;
+  height: 72px;
+  line-height: 72px;
+  font-size: 20px;
+  border-radius: 20px;
+  background-color: skyblue;
+  color: white;
+  margin-bottom: 35px;
+}
+.nav{
+  width: 100%;
+  margin-bottom: 50px;
+}
+.nav a{
+  text-decoration: none;
+  color: skyblue;
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+  background-color: aquamarine;
+  margin-left: 280px;
+  width: 100px;
+  text-align: center;
+  border-radius: 20px;
+  transition: .5s ease-in-out;
+}
+
+a.active{
+  background-color: black;
+  color: white;
+}
+
+.content{
+  position: relative;
+  height: 400px;
+  width: 80%;
+  margin: 0 auto;
+  border-radius: 20px;
+  border: 1px solid black;
+}
+
+.content img{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
 </style>
