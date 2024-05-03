@@ -1,6 +1,7 @@
 <script setup lang="ts" name="News">
 import {reactive} from "vue";
 import {RouterView, RouterLink} from "vue-router";
+import {useRouter} from "vue-router";
 
 const news_list = reactive([
   {
@@ -14,12 +15,35 @@ const news_list = reactive([
   }
 ]);
 
+const router = useRouter();
+
+interface NewsInter {
+  id: string,
+  title: string,
+  content: string
+}
+// 方法
+function showDetail(item: NewsInter){
+  // 这里用的push会在浏览器留下历史痕迹 用replace不会留下
+  // 具体使用哪一种，看业务情况
+  router.push({
+    name: 'detail',
+    query:{
+      id: item.id,
+      title: item.title,
+      content: item.content
+    }
+  });
+}
+
+
 </script>
 
 <template>
   <!-- 导航区 -->
   <ul class="news-list">
     <li v-for="item in news_list" :key="item.id">
+      <button @click="showDetail(item)">查看新闻</button>
       <!-- 第一种写法 很麻烦 -->
       <!--<RouterLink :to="`/news/detail?id=${item.id}&&title=${item.title}&&content=${item.content}`">{{item.title}}</RouterLink>-->
 
@@ -47,7 +71,7 @@ const news_list = reactive([
 <style scoped>
 .news-list{
   list-style-type: none;
-  width: 200px;
+  width: 250px;
   float: left;
 }
 .news-list li{
@@ -69,6 +93,10 @@ const news_list = reactive([
   margin-top: 30px;
   margin-right: 100px;
   padding: 20px;
+}
+
+button{
+  cursor: pointer;
 }
 
 </style>
